@@ -20,7 +20,7 @@ import 'rxjs/add/operator/map';
     `
     :host {
       display: block;
-      padding: 24px;
+      padding: 10px;
       color: red;
       background: rgba(0,0,0,0.1);
     }
@@ -65,6 +65,7 @@ export class CdkTableBasicExample {
       const factory = this.resolver.resolveComponentFactory(
         InlineMessageComponent
       );
+  
       const messageComponent = container.createComponent(factory);
 
       messageComponent.instance.user = this.exampleDatabase.data[index].name;
