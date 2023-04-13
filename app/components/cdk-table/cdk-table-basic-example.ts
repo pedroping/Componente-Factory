@@ -1,7 +1,14 @@
-import {Component, Input, ComponentFactoryResolver, ComponentRef, ViewChildren, ViewContainerRef} from '@angular/core';
-import {DataSource, CdkTable, CdkRowDef} from '@angular/cdk/table';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
+import {
+  Component,
+  Input,
+  ComponentFactoryResolver,
+  ComponentRef,
+  ViewChildren,
+  ViewContainerRef,
+} from '@angular/core';
+import { DataSource, CdkTable, CdkRowDef } from '@angular/cdk/table';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
@@ -9,20 +16,20 @@ import 'rxjs/add/operator/map';
 @Component({
   selector: 'app-inline-message',
   template: 'Detail: {{ user }}',
-  styles: [`
+  styles: [
+    `
     :host {
       display: block;
       padding: 24px;
       color: red;
       background: rgba(0,0,0,0.1);
     }
-  `]
+  `,
+  ],
 })
 export class InlineMessageComponent {
   @Input() user: string;
 }
-
-
 
 @Component({
   selector: 'cdk-table-basic-example',
@@ -33,34 +40,33 @@ export class CdkTableBasicExample {
   displayedColumns = ['userId', 'userName', 'progress', 'color'];
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
-  
+
   @ViewChildren('cdkrow', { read: ViewContainerRef }) containers;
 
   expandedRow: number;
-  
-  constructor(private resolver: ComponentFactoryResolver) {
-    
-  }
+
+  constructor(private resolver: ComponentFactoryResolver) {}
 
   ngOnInit() {
     this.dataSource = new ExampleDataSource(this.exampleDatabase);
   }
-  
+
   expandRow(index: number) {
-    
     if (this.expandedRow != null) {
       // clear old message
       this.containers.toArray()[this.expandedRow].clear();
     }
-    
+
     if (this.expandedRow === index) {
       this.expandedRow = null;
     } else {
       const container = this.containers.toArray()[index];
       console.log('container', container);
-      const factory: ComponentFactory = this.resolver.resolveComponentFactory(InlineMessageComponent);
+      const factory = this.resolver.resolveComponentFactory(
+        InlineMessageComponent
+      );
       const messageComponent = container.createComponent(factory);
-      
+
       messageComponent.instance.user = this.exampleDatabase.data[index].name;
       this.expandedRow = index;
     }
@@ -68,11 +74,44 @@ export class CdkTableBasicExample {
 }
 
 /** Constants used to fill up our data base. */
-const COLORS = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
+const COLORS = [
+  'maroon',
+  'red',
+  'orange',
+  'yellow',
+  'olive',
+  'green',
+  'purple',
+  'fuchsia',
+  'lime',
+  'teal',
+  'aqua',
+  'blue',
+  'navy',
+  'black',
+  'gray',
+];
+const NAMES = [
+  'Maia',
+  'Asher',
+  'Olivia',
+  'Atticus',
+  'Amelia',
+  'Jack',
+  'Charlotte',
+  'Theodore',
+  'Isla',
+  'Oliver',
+  'Isabella',
+  'Jasper',
+  'Cora',
+  'Levi',
+  'Violet',
+  'Arthur',
+  'Mia',
+  'Thomas',
+  'Elizabeth',
+];
 
 export interface UserData {
   id: string;
@@ -85,11 +124,15 @@ export interface UserData {
 export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
-  get data(): UserData[] { return this.dataChange.value; }
+  get data(): UserData[] {
+    return this.dataChange.value;
+  }
 
   constructor() {
     // Fill up the database with 100 users.
-    for (let i = 0; i < 100; i++) { this.addUser(); }
+    for (let i = 0; i < 100; i++) {
+      this.addUser();
+    }
   }
 
   /** Adds a new user to the database. */
@@ -102,14 +145,16 @@ export class ExampleDatabase {
   /** Builds and returns a new User. */
   private createNewUser() {
     const name =
-        NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-        NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
+      ' ' +
+      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
+      '.';
 
     return {
       id: (this.data.length + 1).toString(),
       name: name,
       progress: Math.round(Math.random() * 100).toString(),
-      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+      color: COLORS[Math.round(Math.random() * (COLORS.length - 1))],
     };
   }
 }
@@ -133,7 +178,6 @@ export class ExampleDataSource extends DataSource<any> {
 
   disconnect() {}
 }
-
 
 /**  Copyright 2017 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
