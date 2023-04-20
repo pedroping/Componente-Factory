@@ -43,7 +43,7 @@ export class CdkTableBasicExample {
 
   @ViewChildren('cdkrow', { read: ViewContainerRef }) containers;
 
-  expandedRow: number;
+  expandedRow: number[] = [];
 
   constructor(private resolver: ComponentFactoryResolver) {}
 
@@ -52,25 +52,17 @@ export class CdkTableBasicExample {
   }
 
   expandRow(index: number) {
-    if (this.expandedRow != null) {
-      // clear old message
-      this.containers.toArray()[this.expandedRow].clear();
+    if(this.expandedRow.indexOf(index) > -1){
+      this.containers.toArray()[index]?.clear()
+      this.expandedRow = this.expandedRow.filter(x => x != index)
+      return
     }
-
-    if (this.expandedRow === index) {
-      this.expandedRow = null;
-    } else {
-      const container = this.containers.toArray()[index];
-      console.log('container', container);
-      const factory = this.resolver.resolveComponentFactory(
-        InlineMessageComponent
-      );
-  
-      const messageComponent = container.createComponent(factory);
-
-      messageComponent.instance.user = this.exampleDatabase.data[index].name;
-      this.expandedRow = index;
-    }
+    this.expandedRow.push(index)
+    const factory = this.resolver.resolveComponentFactory(
+      InlineMessageComponent
+    );
+    const messageComponent = this.containers.toArray()[index]?.createComponent(factory)
+    messageComponent.instance.user = this.exampleDatabase.data[index].name;
   }
 }
 
