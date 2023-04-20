@@ -15,7 +15,10 @@ import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-inline-message',
-  template: 'Detail: {{ user }}',
+  template: `
+    <p>Detail: {{ user }}</p>
+    <textarea style="width: 100%">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sollicitudin gravida tellus, nec faucibus sapien. Morbi et est nibh. Vivamus vestibulum sapien non blandit lacinia. In viverra lectus nulla, ut dignissim metus congue nec. Vivamus dictum dolor urna, et volutpat ante aliquet et. Sed maximus magna vitae massa ultrices iaculis. Quisque posuere, risus a egestas convallis, ipsum arcu fringilla libero, quis hendrerit ante neque eget nulla.</textarea>
+  `,
   styles: [
     `
     :host {
@@ -41,7 +44,7 @@ export class CdkTableBasicExample {
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
 
-  @ViewChildren('cdkrow', { read: ViewContainerRef }) containers;
+  @ViewChildren('row', { read: ViewContainerRef }) containers;
 
   expandedRow: number[] = [];
 
