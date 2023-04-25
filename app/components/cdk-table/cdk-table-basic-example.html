@@ -60,6 +60,14 @@
     >
     </cdk-row>
   </cdk-table>
+  <mat-paginator
+    (page)="handlePageEvent($event)"
+    [length]="tablelength"
+    [pageSize]="5"
+    [pageSizeOptions]="[1, 2, 5, 10]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
 </div>
 
 <!-- Copyright 2017 Google Inc. All Rights Reserved.

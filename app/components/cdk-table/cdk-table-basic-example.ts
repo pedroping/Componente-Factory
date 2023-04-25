@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-inline-message',
@@ -43,7 +44,7 @@ export class CdkTableBasicExample {
   displayedColumns = ['userId', 'userName', 'progress', 'color'];
   exampleDatabase = new ExampleDatabase();
   dataSource: ExampleDataSource | null;
-
+  tablelength: number;
   @ViewChildren('row', { read: ViewContainerRef }) containers;
 
   expandedRow: number[] = [];
@@ -51,21 +52,35 @@ export class CdkTableBasicExample {
   constructor(private resolver: ComponentFactoryResolver) {}
 
   ngOnInit() {
+    console.log(this.exampleDatabase.data);
     this.dataSource = new ExampleDataSource(this.exampleDatabase);
+    this.tablelength = this.exampleDatabase.data.length;
+    this.handlePageEvent({pageIndex: 0, pageSize: 5, length: 100})
   }
 
   expandRow(index: number) {
-    if(this.expandedRow.indexOf(index) > -1){
-      this.containers.toArray()[index]?.clear()
-      this.expandedRow = this.expandedRow.filter(x => x != index)
-      return
+    if (this.expandedRow.indexOf(index) > -1) {
+      this.containers.toArray()[index]?.clear();
+      this.expandedRow = this.expandedRow.filter((x) => x != index);
+      return;
     }
-    this.expandedRow.push(index)
+    this.expandedRow.push(index);
     const factory = this.resolver.resolveComponentFactory(
       InlineMessageComponent
     );
-    const messageComponent = this.containers.toArray()[index]?.createComponent(factory)
+    const messageComponent = this.containers
+      .toArray()
+      [index]?.createComponent(factory);
     messageComponent.instance.user = this.exampleDatabase.data[index].name;
+  }
+
+  handlePageEvent(e: PageEvent) {
+    console.log(e)
+    const CopiedData = this.exampleDatabase.DefaultData;
+    const index = e.pageIndex * e.pageSize;
+    this.exampleDatabase.dataChange.next(
+      CopiedData.slice(index, index + e.pageSize)
+    );
   }
 }
 
@@ -120,6 +135,7 @@ export interface UserData {
 export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
+  DefaultData: UserData[] = [];
   get data(): UserData[] {
     return this.dataChange.value;
   }
@@ -135,11 +151,12 @@ export class ExampleDatabase {
   addUser() {
     const copiedData = this.data.slice();
     copiedData.push(this.createNewUser());
+    this.DefaultData = copiedData;
     this.dataChange.next(copiedData);
   }
 
   /** Builds and returns a new User. */
-  private createNewUser() {
+  public createNewUser() {
     const name =
       NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
       ' ' +
