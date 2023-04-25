@@ -55,7 +55,7 @@ export class CdkTableBasicExample {
     console.log(this.exampleDatabase.data);
     this.dataSource = new ExampleDataSource(this.exampleDatabase);
     this.tablelength = this.exampleDatabase.data.length;
-    this.handlePageEvent({pageIndex: 0, pageSize: 5, length: 100})
+    this.handlePageEvent({ pageIndex: 0, pageSize: 5, length: 100 });
   }
 
   expandRow(index: number) {
@@ -75,7 +75,6 @@ export class CdkTableBasicExample {
   }
 
   handlePageEvent(e: PageEvent) {
-    console.log(e)
     const CopiedData = this.exampleDatabase.DefaultData;
     const index = e.pageIndex * e.pageSize;
     this.exampleDatabase.dataChange.next(
