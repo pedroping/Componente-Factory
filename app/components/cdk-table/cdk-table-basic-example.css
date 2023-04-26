@@ -15,11 +15,12 @@
   overflow: auto;
 }
 
-.example-header-row, .example-row {
+.example-header-row,
+.example-row {
   display: flex;
   border-bottom: 1px solid #ccc;
   align-items: center;
-  height: 32px;
+  height: 20px;
   padding: 0 8px;
 }
 
@@ -27,7 +28,8 @@
   cursor: pointer;
 }
 
-.example-cell, .example-header-cell {
+.example-cell,
+.example-header-cell {
   flex: 1;
 }
 
